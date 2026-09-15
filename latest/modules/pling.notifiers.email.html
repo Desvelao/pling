@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>pling - Standalone Lua library for sending notifications through pluggable channels (v0.1.0)</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>pling</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/pling.html">pling</a></li>
+  <li><a href="../modules/pling.logger.html">pling.logger</a></li>
+  <li><a href="../modules/pling.notifiers.audio.html">pling.notifiers.audio</a></li>
+  <li><a href="../modules/pling.notifiers.discord.html">pling.notifiers.discord</a></li>
+  <li><strong>pling.notifiers.email</strong></li>
+  <li><a href="../modules/pling.notifiers.gpio.html">pling.notifiers.gpio</a></li>
+  <li><a href="../modules/pling.notifiers.mqtt.html">pling.notifiers.mqtt</a></li>
+  <li><a href="../modules/pling.notifiers.slack.html">pling.notifiers.slack</a></li>
+  <li><a href="../modules/pling.notifiers.webhook.html">pling.notifiers.webhook</a></li>
+  <li><a href="../modules/pling.notifiers.webhook_transport.html">pling.notifiers.webhook_transport</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/README.md.html">README</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>pling.notifiers.email</code></h1>
+<p>Email channel notifier.</p>
+<p> Sends notifications by email over SMTP, using LuaSocket's bundled
+ socket.smtp module.</p>
+
+<p> Supports plain SMTP and implicit TLS (<code>smtp_cfg.ssl = true</code>, typically
+ port 465, via LuaSec). STARTTLS (<code>smtp_cfg.starttls = true</code>, typically
+ port 587) is deliberately NOT implemented: it requires speaking plain
+ SMTP up through the STARTTLS command/response and then upgrading the
+ same connection to TLS mid-stream, which socket.smtp's transport layer
+ has no hook for - a correct implementation needs its own hand-rolled SMTP
+ conversation, not a <code>create</code> factory. Rather than ship an untested
+ half-implementation, <code>:send</code> fails fast with a clear error; use implicit
+ TLS or a plain relay for now.</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#new">new (smtp_cfg)</a></td>
+	<td class="summary">Creates a new email notifier.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#send">send (target_cfg, notification)</a></td>
+	<td class="summary">Sends a notification by email.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "new"></a>
+    <strong>new (smtp_cfg)</strong>
+    </dt>
+    <dd>
+    Creates a new email notifier.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">smtp_cfg</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         SMTP config: <code>host</code> (required), <code>port</code> (optional,
+ defaults to 25), <code>from</code> (required), <code>user</code>, <code>password</code> (optional
+ credentials), <code>ssl</code> (optional boolean, implicit TLS), <code>subject_prefix</code>
+ (optional default subject), <code>create</code> (optional socket factory override)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        email notifier instance
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "send"></a>
+    <strong>send (target_cfg, notification)</strong>
+    </dt>
+    <dd>
+    Sends a notification by email.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">target_cfg</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         destination config: <code>to</code> (required list of
+ recipient addresses), <code>subject_prefix</code> (optional),
+ <code>template</code> (optional function(notification) -> { subject, body })
+        </li>
+        <li><span class="parameter">notification</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         opaque, caller-defined notification table
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">boolean</span></span>
+        ok</li>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        err present when <code>ok</code> is false</li>
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2026-09-15 19:49:19 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

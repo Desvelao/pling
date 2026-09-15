@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>pling - Standalone Lua library for sending notifications through pluggable channels (v0.1.0)</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>pling</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/pling.html">pling</a></li>
+  <li><strong>pling.logger</strong></li>
+  <li><a href="../modules/pling.notifiers.audio.html">pling.notifiers.audio</a></li>
+  <li><a href="../modules/pling.notifiers.discord.html">pling.notifiers.discord</a></li>
+  <li><a href="../modules/pling.notifiers.email.html">pling.notifiers.email</a></li>
+  <li><a href="../modules/pling.notifiers.gpio.html">pling.notifiers.gpio</a></li>
+  <li><a href="../modules/pling.notifiers.mqtt.html">pling.notifiers.mqtt</a></li>
+  <li><a href="../modules/pling.notifiers.slack.html">pling.notifiers.slack</a></li>
+  <li><a href="../modules/pling.notifiers.webhook.html">pling.notifiers.webhook</a></li>
+  <li><a href="../modules/pling.notifiers.webhook_transport.html">pling.notifiers.webhook_transport</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/README.md.html">README</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>pling.logger</code></h1>
+<p>Logger class with debug, warn, error, and info levels
+ Supports rendering date and custom tags</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Logger.new">Logger.new (tag)</a></td>
+	<td class="summary">Creates a new logger instance</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.debug">instance.debug (message)</a></td>
+	<td class="summary">Logs a debug level message</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.info">instance.info (message)</a></td>
+	<td class="summary">Logs an info level message</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.warn">instance.warn (message)</a></td>
+	<td class="summary">Logs a warn level message</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.error">instance.error (message)</a></td>
+	<td class="summary">Logs an error level message</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Logger.new"></a>
+    <strong>Logger.new (tag)</strong>
+    </dt>
+    <dd>
+    Creates a new logger instance
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tag</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Optional tag to identify the logger source
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        Logger instance with log level functions
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.debug"></a>
+    <strong>instance.debug (message)</strong>
+    </dt>
+    <dd>
+    Logs a debug level message
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The message to log
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.info"></a>
+    <strong>instance.info (message)</strong>
+    </dt>
+    <dd>
+    Logs an info level message
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The message to log
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.warn"></a>
+    <strong>instance.warn (message)</strong>
+    </dt>
+    <dd>
+    Logs a warn level message
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The message to log
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.error"></a>
+    <strong>instance.error (message)</strong>
+    </dt>
+    <dd>
+    Logs an error level message
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The message to log
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2026-09-15 19:49:19 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>pling - Standalone Lua library for sending notifications through pluggable channels (v0.1.0)</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>pling</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/pling.html">pling</a></li>
+  <li><a href="../modules/pling.logger.html">pling.logger</a></li>
+  <li><a href="../modules/pling.notifiers.audio.html">pling.notifiers.audio</a></li>
+  <li><a href="../modules/pling.notifiers.discord.html">pling.notifiers.discord</a></li>
+  <li><a href="../modules/pling.notifiers.email.html">pling.notifiers.email</a></li>
+  <li><a href="../modules/pling.notifiers.gpio.html">pling.notifiers.gpio</a></li>
+  <li><a href="../modules/pling.notifiers.mqtt.html">pling.notifiers.mqtt</a></li>
+  <li><a href="../modules/pling.notifiers.slack.html">pling.notifiers.slack</a></li>
+  <li><a href="../modules/pling.notifiers.webhook.html">pling.notifiers.webhook</a></li>
+  <li><strong>pling.notifiers.webhook_transport</strong></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/README.md.html">README</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>pling.notifiers.webhook_transport</code></h1>
+<p>Generic HTTP transport for webhook-style notifiers.</p>
+<p> "POST a JSON payload to a URL" transport, shared by every webhook-style
+ notifier (Slack/Discord/custom webhook).</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#new">new (opts)</a></td>
+	<td class="summary">Creates a new webhook transport.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#send">send (url, payload, headers, method)</a></td>
+	<td class="summary">POSTs (or sends via another method) a JSON-encoded payload to a URL.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "new"></a>
+    <strong>new (opts)</strong>
+    </dt>
+    <dd>
+    Creates a new webhook transport.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">opts</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         optional config: <code>timeout</code> in seconds (default 10)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        webhook_transport instance
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "send"></a>
+    <strong>send (url, payload, headers, method)</strong>
+    </dt>
+    <dd>
+    POSTs (or sends via another method) a JSON-encoded payload to a URL.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">url</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         destination URL; <code>https://</code> routes through LuaSec,
+ <code>http://</code> through plain socket.http
+        </li>
+        <li><span class="parameter">payload</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         JSON-encodable payload table
+        </li>
+        <li><span class="parameter">headers</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         optional extra request headers, merged over the
+ default <code>Content-Type</code>/<code>Content-Length</code>
+        </li>
+        <li><span class="parameter">method</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         optional HTTP method, defaults to <code>&quot;POST&quot;</code>
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">boolean</span></span>
+        ok</li>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        err present when <code>ok</code> is false</li>
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2026-09-15 19:49:19 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

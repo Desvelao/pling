@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>pling - Standalone Lua library for sending notifications through pluggable channels (v0.1.0)</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>pling</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Installation">Installation </a></li>
+<li><a href="#Usage">Usage </a></li>
+<li><a href="#Development">Development </a></li>
+<li><a href="#License">License </a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul class="">
+  <li><strong>README</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/pling.html">pling</a></li>
+  <li><a href="../modules/pling.logger.html">pling.logger</a></li>
+  <li><a href="../modules/pling.notifiers.audio.html">pling.notifiers.audio</a></li>
+  <li><a href="../modules/pling.notifiers.discord.html">pling.notifiers.discord</a></li>
+  <li><a href="../modules/pling.notifiers.email.html">pling.notifiers.email</a></li>
+  <li><a href="../modules/pling.notifiers.gpio.html">pling.notifiers.gpio</a></li>
+  <li><a href="../modules/pling.notifiers.mqtt.html">pling.notifiers.mqtt</a></li>
+  <li><a href="../modules/pling.notifiers.slack.html">pling.notifiers.slack</a></li>
+  <li><a href="../modules/pling.notifiers.webhook.html">pling.notifiers.webhook</a></li>
+  <li><a href="../modules/pling.notifiers.webhook_transport.html">pling.notifiers.webhook_transport</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+
+<h1>pling</h1>
+
+<p>A standalone Lua library for sending notifications through pluggable
+channels: audio, GPIO, MQTT, Slack, Discord, a generic webhook, and email
+(SMTP).</p>
+
+<p>Every channel follows the same duck-typed convention — no shared base
+class/interface, just:</p>
+
+
+<pre>
+<span class="keyword">local</span> instance = M.<span class="function-name">new</span>(...)
+<span class="keyword">local</span> ok, err = instance:<span class="function-name">send</span>(destination, notification)
+</pre>
+
+
+<p>A <strong>notification</strong> is an opaque, caller-defined Lua table. This library
+never assumes any particular fields (no <code>priority</code>, <code>source</code>, <code>pattern</code>,
+<code>id</code>, ...) — that vocabulary belongs to the application using this library,
+not to <a href="../modules/pling.html#">pling</a> itself.</p>
+
+<p>There is <strong>no router</strong>. <a href="../modules/pling.html#">pling</a> ships only the channel notifiers, each
+usable standalone; routing/rule-based fan-out to multiple destinations is
+left entirely to the calling application.</p>
+
+<p><a name="Installation"></a></p>
+<h2>Installation</h2>
+
+<pre><code> luarocks install pling-0.1.0-1.rockspec
+</code></pre>
+
+
+<p><a name="Usage"></a></p>
+<h2>Usage</h2>
+
+
+<pre>
+<span class="keyword">local</span> pling = <span class="global">require</span>(<span class="string">"pling"</span>)
+
+<span class="comment">-- Webhook-style channels (slack, discord, webhook) are composed with a
+</span><span class="comment">-- shared HTTP transport:
+</span><span class="keyword">local</span> transport = pling.webhook_transport.<span class="function-name">new</span>({ timeout = <span class="number">10</span> })
+<span class="keyword">local</span> slack = pling.slack.<span class="function-name">new</span>(transport)
+
+<span class="keyword">local</span> ok, err = slack:<span class="function-name">send</span>(
+  { url = <span class="string">"https://hooks.slack.com/services/..."</span> },
+  { source = <span class="string">"sensor-1"</span>, value = <span class="number">42</span> }
+)
+</pre>
+
+
+<p>Each notifier's constructor and destination-config shape:</p>
+
+<p>| Channel    | <code>M.new(...)</code>             | <code>destination</code> / <code>target_cfg</code> fields                                             |
+| ---------- | ------------------------- | -------------------------------------------------------------------------------- |
+| <code>audio</code>    | <code>M.new()</code>                 | <code>file</code> (path to a sound file)                                                    |
+| <code>gpio</code>     | <code>M.new()</code>                 | <code>pin</code>, <code>active_low</code> (bool), <code>duration_ms</code> (default 500)                          |
+| <code>mqtt</code>     | <code>M.new()</code>                 | <code>address</code>, <code>topic</code>, <code>qos</code>, <code>retain</code>, <code>client_id</code>, <code>template</code>                     |
+| <code>slack</code>    | <code>M.new(transport)</code>        | <code>url</code>, <code>headers</code>, <code>template</code>                                                     |
+| <code>discord</code>  | <code>M.new(transport)</code>        | <code>url</code>, <code>headers</code>, <code>template</code>                                                     |
+| <code>webhook</code>  | <code>M.new(transport)</code>        | <code>url</code>, <code>headers</code>, <code>template</code>                                                     |
+| <code>email</code>    | <code>M.new(smtp_cfg)</code>         | <code>to</code>, <code>subject_prefix</code>, <code>template</code>; <code>smtp_cfg</code>: <code>host</code>, <code>port</code>, <code>from</code>, <code>user</code>, <code>password</code>, <code>ssl</code>, <code>subject_prefix</code> |</p>
+
+<h3>The <code>template</code> hook</h3>
+
+<p><code>mqtt</code>, <code>slack</code>, <code>discord</code>, <code>webhook</code>, and <code>email</code> all accept an optional
+<code>template</code> function on the destination/target config, giving the caller
+full control over the outgoing payload:</p>
+
+<ul>
+    <li><code>mqtt</code> / <code>slack</code> / <code>discord</code> / <code>webhook</code>: `template(notification) ->
+    payload_table`</li>
+    <li><code>email</code>: <code>template(notification) -&gt; { subject = ..., body = ... }</code></li>
+</ul>
+
+<p>When no <code>template</code> is given, each channel falls back to a schema-agnostic
+default that JSON-encodes the whole notification table:</p>
+
+<ul>
+    <li><code>mqtt</code>: publishes the notification (or <code>template</code> result) as-is</li>
+    <li><code>slack</code>: <code>{ text = json_encode(notification) }</code></li>
+    <li><code>discord</code>: <code>{ embeds = { { description = json_encode(notification) } } }</code></li>
+    <li><code>webhook</code>: <code>{ event = &quot;notification&quot;, notification = notification }</code></li>
+    <li><code>email</code>: subject `smtp<em>cfg.subject</em>prefix or target<em>cfg.subject</em>prefix or
+    "Notification"<code>, body </code>json_encode(notification)`</li>
+</ul>
+
+<p><code>audio</code> and <code>gpio</code> ignore the notification entirely — they only act on
+their own destination config (a file to play / a pin to pulse).</p>
+
+<p><a name="Development"></a></p>
+<h2>Development</h2>
+
+<p>All development and testing happens through Docker — no <code>lua</code>/<code>luarocks</code>/
+<code>busted</code> toolchain is expected on the host.</p>
+
+<pre><code> docker compose up -d
+ docker compose exec dev luarocks make pling-0.1.0-1.rockspec
+ docker compose exec dev busted spec
+ docker compose exec dev stylua src spec
+ docker compose exec dev ldoc .
+ docker compose down
+</code></pre>
+
+
+<p><a name="License"></a></p>
+<h2>License</h2>
+
+<p>MIT — see <a href="./LICENSE">LICENSE</a>.</p>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2026-09-15 19:49:19 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
