@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>pling documentation</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    select { font-size: 1em; padding: 0.2em; }
+  </style>
+</head>
+<body>
+  <h1>pling documentation</h1>
+  <label for="version">Select version:</label>
+  <select id="version"></select>
+
+  <script>
+    async function loadVersions() {
+      try {
+        // Fetch tags from GitHub API
+        const res = await fetch("https://api.github.com/repos/Desvelao/pling/tags");
+        const tags = await res.json();
+
+        const select = document.getElementById("version");
+
+        tags.forEach(tag => {
+          const opt = document.createElement("option");
+          opt.value = tag.name + "/";   // assumes docs are in folders named after tags
+          opt.textContent = tag.name;
+          select.appendChild(opt);
+        });
+
+        select.addEventListener("change", (e) => {
+            window.location.href = window.location.href + select.value;
+        });
+
+        // Optional: preselect the first (latest) tag
+        if (tags.length > 0) {
+          select.value = tags[0].name + "/";
+        }
+
+        // Redirect when user selects
+        select.addEventListener("change", () => {
+          window.location.href = select.value;
+        });
+      } catch (e) {
+        console.error("Could not load tags from GitHub API", e);
+      }
+    }
+    loadVersions();
+  </script>
+</body>
+</html>
