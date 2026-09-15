@@ -1,0 +1,46 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Lua and Luarocks
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.1 luarocks
+
+      - name: Install Test Framework (Busted)
+        run: luarocks install --only-deps *.rockspec --local
+
+      - name: Run Tests
+        run: /home/runner/.luarocks/bin/busted --verbose spec
+
+  lint:
+    runs-on: ubuntu-latest
+
+    env:
+      STYLUA_VERSION: 2.1.0
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install StyLua
+        run: |
+          curl -L -o stylua.zip "https://github.com/JohnnyMorganz/StyLua/releases/download/v${STYLUA_VERSION}/stylua-linux-x86_64.zip"
+          unzip stylua.zip -d /usr/local/bin/
+          chmod +x /usr/local/bin/stylua
+          rm stylua.zip
+
+      - name: Check formatting
+        run: stylua --check src spec

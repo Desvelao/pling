@@ -1,0 +1,72 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v*'        # build on version tags (e.g., v1.2.3)
+  workflow_dispatch: # allow manual runs for testing
+
+permissions:
+  contents: write      # allow pushing commits to branches
+  pages: write         # allow publishing to GitHub Pages (if using the new Pages API)
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # ensure tags are available
+
+      - name: Install Lua and LDoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.1 luarocks
+          sudo luarocks install ldoc
+
+      - name: Build LDoc
+        run: ldoc .
+
+      - name: Determine version and paths
+        id: vars
+        run: |
+          VERSION=$(cat VERSION)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+          # Folder under gh-pages: use tag name (e.g., v1.2.3)
+          echo "dest_dir=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Publish versioned docs
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs
+          destination_dir: ${{ steps.vars.outputs.dest_dir }}
+          keep_files: true   # retain older versions
+
+      - name: Publish latest alias
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs
+          destination_dir: latest
+          keep_files: true
+
+  luarocks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Lua and Luarocks
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.1 luarocks
+          sudo luarocks install dkjson
+
+      - name: Upload to LuaRocks
+        run: luarocks upload $(ls *.rockspec) --api-key=${{ secrets.LUAROCKS_API_KEY }}

@@ -1,0 +1,11 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pling-dev:latest
+    volumes:
+      - .:/app
+    # Idle entrypoint: this is a library with no app to run, the container
+    # only needs to stay up for `docker compose exec dev ...`.
+    entrypoint: ["tail", "-f", "/dev/null"]
