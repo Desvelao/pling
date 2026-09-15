@@ -19,8 +19,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y lua5.1 luarocks
 
-      - name: Install Test Framework (Busted)
+      - name: Install Dependencies
         run: luarocks install --only-deps *.rockspec --local
+
+      - name: Install Test Framework (Busted)
+        run: luarocks install busted 2.2.0-1 --local
 
       - name: Run Tests
         run: /home/runner/.luarocks/bin/busted --verbose spec
